@@ -1,5 +1,5 @@
 variable "test1" {
-  description = "strange optional behavior."
+  description = "strange optional behavior in 1.3.3."
   type = object({
     obj = object({
       str_val = string
@@ -10,13 +10,13 @@ variable "test1" {
       str_val = string
       opt_str_val = optional(string)
       opt_str_val_default = optional(string, "huhu")
-    }), null)
+    }), null) # null != omitting default
   })
 }
 
 
 variable "test2" {
-  description = "strange optional behavior."
+  description = "regression optional behavior in 1.3.4."
   type = object({
     obj = object({
       str_val = string
@@ -32,8 +32,8 @@ variable "test2" {
   })
 }
 
-# locals {
-#   opt_obj = lookup(var.test2, "opt_obj", null) == null ? null : merge(var.test2.opt_obj, {
-#     opt_map_val = var.test2.opt_map_val == null ? {} : { foo = "bar" }
-#   })
-# }
+locals {
+  opt_obj = lookup(var.test2, "opt_obj", null) == null ? null : merge(var.test2.opt_obj, {
+    opt_map_val = var.test2.opt_map_val == null ? {} : { foo = "bar" }
+  })
+}
